@@ -1,0 +1,36 @@
+import numpy as np
+import matplotlib.pyplot as plt
+length=9.8
+g=9.8
+dt=0.04
+total_time=60
+q=0.5
+F_D=1.2
+Omega_D=2/3
+
+n_steps=int(total_time/dt)
+t=np.zeros(n_steps)
+theta=np.zeros(n_steps)
+omega=np.zeros(n_steps)
+
+t[0]=0.0
+theta[0]=0.2
+omega[0]=0.0
+
+for i in range(n_steps-1):
+    omega[i+1] = omega[i] - ((g/length)*np.sin(theta[i]) + q*omega[i] - F_D*np.sin(Omega_D*t[i])) * dt
+    theta[i+1]=theta[i]+omega[i+1]*dt
+    if theta[i+1]>np.pi:
+        theta[i+1]-=2*np.pi
+    elif theta[i+1]<-np.pi:
+        theta[i+1]+=2*np.pi
+    t[i+1]=t[i]+dt
+    
+
+plt.plot(t, theta, color="black")
+plt.title('Physical Pendulum [Euler-Cromer Method]\nLength=1 m')
+plt.xlabel('time(s)')
+plt.ylabel('theta(radians)')
+plt.xlim(0,total_time)
+plt.axhline(0,color='grey',linestyle='--')
+plt.show()
